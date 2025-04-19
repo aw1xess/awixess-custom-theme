@@ -1,8 +1,6 @@
 {{ 'section-custom-featured-products.css' | asset_url | stylesheet_tag }}
 {{ 'component-custom-featured-product.css' | asset_url | stylesheet_tag }}
 
-<script type="module" src="{{ 'custom-featured-product.js' | asset_url }}" defer="defer"></script>
-
 {% schema %}
 {
   "name": "Custom Featured Products",
@@ -28,26 +26,33 @@
 }
 {% endschema %}
 
-<section class="custom-featured-products">
+{% assign selected_collection = collections[section.settings.collection] %}
+{% assign products = selected_collection.products %}
+{%- assign cart_product_ids = cart.items | map: 'product_id' -%}
+
+<section class="custom-featured-products" id="custom-featured-products">
   <div class="custom-featured-products__inner" data-section-id="{{ section.id }}">
     <h2 class="custom-featured-products__title">Featured Products</h2>
-    {% assign selected_collection = collections[section.settings.collection] %}
-    {% assign products = selected_collection.products %}
+
     <div class="custom-featured-products__list" id="custom-featured-products-list">
       {% for product in products limit: section.settings.limit %}
-        <div class="custom-featured-products__item" data-product-id="{{ product.id }}">
-          <custom-featured-product
-            data-id="{{ product.id }}"
-            data-title="{{ product.title | escape }}"
-            data-url="{{ product.url }}"
-            data-image="{{ product.featured_image | image_url}}"
-            data-price="{{ product.price | money }}"
-            data-variant-id="{{ product.variants.first.id }}"
-            data-section-id="{{ section.id }}"
-          >
-          </custom-featured-product>
-        </div>
+        {% unless cart_product_ids contains product.id %}
+          <div class="custom-featured-products__item" data-product-id="{{ product.id }}">
+            <custom-featured-product
+              data-id="{{ product.id }}"
+              data-title="{{ product.title | escape }}"
+              data-url="{{ product.url }}"
+              data-image="{{ product.featured_image | image_url}}"
+              data-price="{{ product.price | money }}"
+              data-variant-id="{{ product.variants.first.id }}"
+              data-section-id="{{ section.id }}"
+            >
+            </custom-featured-product>
+          </div>
+        {% endunless %}
       {% endfor %}
     </div>
   </div>
 </section>
+
+<script type="module" src="{{ 'custom-featured-product.js' | asset_url }}" defer="defer"></script>

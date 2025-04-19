@@ -1,7 +1,7 @@
 class CustomFeaturedProduct extends HTMLElement {
   connectedCallback() {
     this.render();
-    this.querySelector(".custom-product__add-button");
+    this.querySelector(".custom-product__add-button").addEventListener("click", () => this.addToCart());
   }
 
   render() {
@@ -30,6 +30,35 @@ class CustomFeaturedProduct extends HTMLElement {
     productLink.append(productImage, productTitle);
 
     this.appendChild(wrapper);
+  }
+
+  async addToCart() {
+    try {
+      const response = await fetch("/cart/add.js", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          items: [{ id: this.dataset.variantId, quantity: 1 }],
+          sections: ["cart-notification-product", "cart-icon-bubble", this.dataset.sectionId],
+        }),
+      });
+
+      const result = await response.json();
+
+      document.getElementById("cart-notification-product").innerHTML = result.sections["cart-notification-product"];
+      document.getElementById("cart-icon-bubble").innerHTML = result.sections["cart-icon-bubble"];
+      document.getElementById("custom-featured-products").innerHTML = result.sections[this.dataset.sectionId];
+
+      const cartNotification = document.querySelector("cart-notification");
+
+      if (cartNotification) {
+        cartNotification.open();
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   }
 }
 
