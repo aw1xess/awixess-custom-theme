@@ -1,0 +1,30 @@
+.custom-product {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  
+  &__image {
+    width: 100%;
+    object-fit: cover;
+    border-radius: 0.5rem;
+  }
+
+  &__title {
+    margin: 1.5em 0 1em;
+  }
+
+  &__add-button {
+    background-color: #464B90;
+    color: #fff;
+    padding: 1em 5em;
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: background 0.3s;
+
+    &:hover {
+      background-color: #696d9e;
+    }
+  }
+}

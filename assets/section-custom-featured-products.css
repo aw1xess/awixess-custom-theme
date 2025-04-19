@@ -1,0 +1,25 @@
+.custom-featured-products {
+  font-size: 16px;
+}
+.custom-featured-products a {
+  text-decoration: none;
+  color: inherit;
+}
+.custom-featured-products__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+.custom-featured-products__title {
+  margin-bottom: 5rem;
+}
+.custom-featured-products__list {
+  display: grid;
+  gap: 7.5em 1em;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 768px) {
+  .custom-featured-products__list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
